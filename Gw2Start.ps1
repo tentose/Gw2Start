@@ -52,6 +52,15 @@ function Start-Gw2Profile {
     Start-Process -FilePath $BHExe
 }
 
+if (!(Test-Path -Path $StorageDir)) {
+    $shortcut = (New-Object -ComObject WScript.Shell).Createshortcut("Start Guild Wars 2.lnk")
+    $shortcut.TargetPath = "%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe"
+    $shortcut.Arguments = "-command `"& '$PSCommandPath'`""
+    $shortcut.IconLocation = "$Gw2Exe"
+    $shortcut.WorkingDirectory = "$PSScriptRoot"
+    $shortcut.Save()
+}
+
 $profiles = Get-ChildItem -Directory -Path $StorageDir
 
 $profileNames = @(foreach ($profile in $profiles) {
